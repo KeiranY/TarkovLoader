@@ -4,6 +4,15 @@ using TarkovLoader;
 using EFT.InventoryLogic;
 using HarmonyLib;
 
+using Ammo = GClass1746;
+using Grenade = GClass1748;
+using GrenadeTemplate = GClass1648;
+using SecureContainer = GClass1712;
+using SecureContainerTemplate = GClass1615;
+using Container = GClass1662;
+using Magazine = GClass1700;
+using ItemAttribute = GClass1758;
+
 namespace ItemValue
 {
     public class ItemValue : BaseMod
@@ -13,7 +22,7 @@ namespace ItemValue
         public override void Init(Dictionary<string, string> options, BaseLoader loader)
         {
             base.Init(options, loader);
-            var harmony = new HarmonyLib.Harmony("com.kcy.ItemValuePatch");
+            var harmony = new Harmony("com.kcy.ItemValuePatch");
             harmony.PatchAll();
         }
 
@@ -23,11 +32,11 @@ namespace ItemValue
             // if (Math.Round(__instance.Value()) == 0) return;
 
             // Make a copy of the existing attributes list, this is needed for inherited types of Item that use a global attributes list (ammo)
-            var atts = new List<GClass1758>();
+            var atts = new List<ItemAttribute>();
             atts.AddRange(__instance.Attributes);
             __instance.Attributes = atts;
 
-            GClass1758 attr = new GClass1758(EItemAttributeId.MoneySum)
+            ItemAttribute attr = new ItemAttribute(EItemAttributeId.MoneySum)
             {
                 Name = "RUB ₽",
                 StringValue = new Func<string>(__instance.ValueStr),
@@ -43,7 +52,7 @@ namespace ItemValue
             double price = item.Template.CreditsPrice;
 
             // Container
-            if (item is GClass1662 container)
+            if (item is Container container)
             {
                 foreach (var slot in container.Slots)
                 {
@@ -54,7 +63,7 @@ namespace ItemValue
                 }
             }
 
-            if (item is GClass1700 mag)
+            if (item is Magazine mag)
             {
                 foreach (var i in mag.Cartridges.Items)
                 {
@@ -110,15 +119,15 @@ namespace ItemValue
         static void PostfixItem(ref Item __instance, string id, ItemTemplate template) => ItemValue.AddItemValue(ref __instance, id, template);
         
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GClass1746), MethodType.Constructor, new Type[] { typeof(string), typeof(AmmoTemplate) })]
-        static void PostfixAmmo(ref GClass1746 __instance, string id, AmmoTemplate template) => ItemValue.AddItemValue(ref __instance, id, template);
+        [HarmonyPatch(typeof(Ammo), MethodType.Constructor, new Type[] { typeof(string), typeof(AmmoTemplate) })]
+        static void PostfixAmmo(ref Ammo __instance, string id, AmmoTemplate template) => ItemValue.AddItemValue(ref __instance, id, template);
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GClass1748), MethodType.Constructor, new Type[] { typeof(string), typeof(GClass1648) })]
-        static void PostfixGrenade(ref GClass1748 __instance, string id, GClass1648 template) => ItemValue.AddItemValue(ref __instance, id, template);
+        [HarmonyPatch(typeof(Grenade), MethodType.Constructor, new Type[] { typeof(string), typeof(GrenadeTemplate) })]
+        static void PostfixGrenade(ref Grenade __instance, string id, GrenadeTemplate template) => ItemValue.AddItemValue(ref __instance, id, template);
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GClass1712), MethodType.Constructor, new Type[] { typeof(string), typeof(GClass1615) })]
-        static void PostfixConainer(ref GClass1748 __instance, string id, GClass1615 template) => ItemValue.AddItemValue(ref __instance, id, template);
+        [HarmonyPatch(typeof(SecureContainer), MethodType.Constructor, new Type[] { typeof(string), typeof(SecureContainerTemplate) })]
+        static void PostfixConainer(ref SecureContainer __instance, string id, SecureContainerTemplate template) => ItemValue.AddItemValue(ref __instance, id, template);
     }
 }
