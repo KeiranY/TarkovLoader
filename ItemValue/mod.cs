@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using TarkovLoader;
 using EFT.InventoryLogic;
@@ -57,6 +57,13 @@ namespace ItemValue
                 foreach (var slot in container.Slots)
                 {
                     foreach (var i in slot.Items)
+                    {
+                        price += i.Value();
+                    }
+                }
+                foreach (var c in container.Containers)
+                {
+                    foreach (var i in c.Items)
                     {
                         price += i.Value();
                     }
