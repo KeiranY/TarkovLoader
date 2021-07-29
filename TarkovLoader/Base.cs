@@ -103,6 +103,7 @@ namespace TarkovLoader
                 log.Error(e.Message + '\n' + e.StackTrace);
             }
         }
+        
 
     }
 
@@ -113,5 +114,18 @@ namespace TarkovLoader
         public Action<string> Info;
         public Action<string> Warn;
         public Action<string> Error;
+    }
+
+    public class NLogLog : BaseLog
+    {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetLogger("application");
+
+        public NLogLog()
+        {
+            Debug = new Action<string>((msg) => Logger.Debug(msg));
+            Info = new Action<string>((msg) => Logger.Info(msg));
+            Warn = new Action<string>((msg) => Logger.Warn(msg));
+            Error = new Action<string>((msg) => Logger.Error(msg));
+        }
     }
 }

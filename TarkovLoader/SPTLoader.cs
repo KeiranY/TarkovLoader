@@ -11,7 +11,7 @@ public class SPTLoader
 {
     private static void Main()
     {
-        var Log = new SPTLog();
+        var Log = new NLogLog();
 
         string folder = "";
         // Search mods folder for module.dlls
@@ -45,20 +45,16 @@ public class SPTLoader
     }
 }
 
-public class SPTLog : BaseLog
-{
-    public SPTLog()
-    {
-        Console.WriteLine("test");
-        var log = Assembly.LoadFrom(@"EscapeFromTarkov_Data\Managed\Aki.Common.dll").GetType("Aki.Common.Log");
-        Debug = new Action<string>((msg) => log.GetMethod("Write").Invoke(null, new System.Object[] { msg }));
-        Info = new Action<string>((msg) => log.GetMethod("Info").Invoke(null, new System.Object[] { msg }));
-        Warn = new Action<string>((msg) => log.GetMethod("Warning").Invoke(null, new System.Object[] { msg }));
-        Error = new Action<string>((msg) => log.GetMethod("Error").Invoke(null, new System.Object[] { msg }));
-        //Debug = (Action<string>)Delegate.CreateDelegate(log, log.GetMethod("Write"));
-        //Info = (Action<string>)Delegate.CreateDelegate(log, log.GetMethod("Info"));
-        //Warn = (Action<string>)Delegate.CreateDelegate(log, log.GetMethod("Warning"));
-        //Error = (Action<string>)Delegate.CreateDelegate(log, log.GetMethod("Error"));
-    }
-}
+//public class SPTLog : BaseLog
+//{
+//    public SPTLog()
+//    {
+//        Console.WriteLine("test");
+//        var log = Assembly.LoadFrom(@"EscapeFromTarkov_Data\Managed\Aki.Common.dll").GetType("Aki.Common.Log");
+//        Debug = new Action<string>((msg) => log.GetMethod("Write").Invoke(null, new System.Object[] { msg }));
+//        Info = new Action<string>((msg) => log.GetMethod("Info").Invoke(null, new System.Object[] { msg }));
+//        Warn = new Action<string>((msg) => log.GetMethod("Warning").Invoke(null, new System.Object[] { msg }));
+//        Error = new Action<string>((msg) => log.GetMethod("Error").Invoke(null, new System.Object[] { msg }));
+//    }
+//}
 
