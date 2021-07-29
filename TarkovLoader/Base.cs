@@ -49,7 +49,7 @@ namespace TarkovLoader
 
         public void LoadMods()
         {
-            log.Info($"[loadler] Loading mods from: {modPath}");
+            log.Info($"[loader] Loading mods from: {modPath}");
 
             foreach (var modDll in Directory.GetFiles(modPath, "*.dll", SearchOption.AllDirectories))
             {
@@ -61,7 +61,7 @@ namespace TarkovLoader
         void LoadMod(string dllPath)
         {
             string name = Path.GetFileNameWithoutExtension(dllPath);
-            log.Info($"[loadler][{name}] Loading from {dllPath}");
+            log.Info($"[loader][{name}] Loading from {dllPath}");
             string confPath = Path.ChangeExtension(dllPath, "json");
             // Load options
             Dictionary<string, string> options = null;
@@ -73,7 +73,7 @@ namespace TarkovLoader
                 }
                 catch (Exception e)
                 {
-                    log.Error($"[loadler][{name}] Error occured while loading conf file {confPath}");
+                    log.Error($"[loader][{name}] Error occured while loading conf file {confPath}");
                     log.Error(e.Message + '\n' + e.StackTrace);
                 }
             }
@@ -88,18 +88,18 @@ namespace TarkovLoader
                         BaseMod mod = (BaseMod)mainObject.AddComponent(t);
                         mod.Init(options, this);
                         mods.Add(mod);
-                        log.Info($"[loadler][{name}] Loaded mod type {t.Name}");
+                        log.Info($"[loader][{name}] Loaded mod type {t.Name}");
                     }
                     catch (Exception e)
                     {
-                        log.Error($"[loadler][{name}] Failed to load mod type {t.Name}");
+                        log.Error($"[loader][{name}] Failed to load mod type {t.Name}");
                         log.Error(e.Message + '\n' + e.StackTrace);
                     }
                 }
             } 
             catch (Exception e)
             {
-                log.Error($"[loadler][{name}] Failed to load mods");
+                log.Error($"[loader][{name}] Failed to load mods");
                 log.Error(e.Message + '\n' + e.StackTrace);
             }
         }
